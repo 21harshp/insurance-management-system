@@ -18,17 +18,25 @@ connectDB();
 const allowedOrigins = [
     'http://localhost:5173',
     'http://localhost:5174',
-    process.env.FRONTEND_URL || '*'
+    'https://mlc-insurance-management.vercel.app',
+    'https://insurance-management-system-md5i.vercel.app'
 ];
+
+// Add FRONTEND_URL from environment if it exists and is not '*'
+if (process.env.FRONTEND_URL && process.env.FRONTEND_URL !== '*') {
+    allowedOrigins.push(process.env.FRONTEND_URL);
+}
 
 app.use(cors({
     origin: function (origin, callback) {
         // Allow requests with no origin (mobile apps, Postman, etc.)
         if (!origin) return callback(null, true);
 
-        if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes('*')) {
+        // Check if origin is in allowed list
+        if (allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
+            console.log('CORS blocked origin:', origin);
             callback(new Error('Not allowed by CORS'));
         }
     },
