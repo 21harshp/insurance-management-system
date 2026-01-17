@@ -1,0 +1,44 @@
+.dashboard-header {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.dashboard-header h1 {
+    margin: 0;
+}
+
+.dashboard-content {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    gap: 2rem;
+    align-items: start;
+}
+
+.dashboard-form,
+.dashboard-table {
+    min-height: 500px;
+}
+
+.dashboard-form .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media (max-width: 1200px) {
+    .dashboard-content {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-form {
+        order: 2;
+    }
+
+    .dashboard-table {
+        order: 1;
+    }
+}

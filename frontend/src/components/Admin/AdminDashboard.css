@@ -1,0 +1,23 @@
+.admin-header {
+    margin-bottom: 2rem;
+}
+
+.admin-header h1 {
+    margin-bottom: 0.5rem;
+}
+
+.admin-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+}
+
+.admin-section {
+    min-height: 400px;
+}
+
+@media (max-width: 1024px) {
+    .admin-content {
+        grid-template-columns: 1fr;
+    }
+}
