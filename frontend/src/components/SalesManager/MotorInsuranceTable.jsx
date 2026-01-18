@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motorInsuranceAPI } from '../../services/api';
+import { errorMessage, successMessage } from '../../utils/message';
 
 const MotorInsuranceTable = ({ refreshTrigger, onRenew }) => {
     const [policies, setPolicies] = useState([]);
@@ -42,6 +43,20 @@ const MotorInsuranceTable = ({ refreshTrigger, onRenew }) => {
     useEffect(() => {
         fetchPolicies();
     }, [refreshTrigger, selectedMonth, searchName]);
+
+    const handleDelete = async (insurance) => {
+        try {
+            const response = await motorInsuranceAPI.delete(insurance._id)
+            console.log(response)
+            if (response.status === 200) {
+                successMessage(response?.data?.data?.message || 'Insurance deleted successfully')
+                fetchPolicies()
+            }
+        } catch (err) {
+            console.error('Failed to delete insurance:', err);
+            errorMessage(err?.response?.data?.message || 'Failed to delete insurance')
+        }
+    }
 
     const shouldShowRenewButton = (policyEndDate) => {
         const currentDate = new Date();
@@ -169,6 +184,12 @@ const MotorInsuranceTable = ({ refreshTrigger, onRenew }) => {
                                                     Renew
                                                 </button>
                                             )}
+                                            <button
+                                                className="btn btn-sm btn-danger"
+                                                onClick={() => handleDelete(policy)}
+                                            >
+                                                Delete
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>

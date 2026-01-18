@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { healthInsuranceAPI } from '../../services/api';
+import { successMessage } from '../../utils/message';
 
 const HealthInsuranceForm = ({ onSuccess, editingPolicy }) => {
     const [formData, setFormData] = useState({
@@ -54,7 +55,7 @@ const HealthInsuranceForm = ({ onSuccess, editingPolicy }) => {
 
         try {
             await healthInsuranceAPI.create(formData);
-            setSuccess('Health insurance policy created successfully');
+            successMessage('Health insurance policy created successfully');
             setFormData({
                 policyStartDate: '',
                 policyEndDate: '',
@@ -74,7 +75,7 @@ const HealthInsuranceForm = ({ onSuccess, editingPolicy }) => {
                 onSuccess();
             }, 2000);
         } catch (err) {
-            setError(err.response?.data?.message || 'Failed to create policy');
+            errorMessage(err.response?.data?.message || 'Failed to create policy');
         } finally {
             setLoading(false);
         }
@@ -82,9 +83,6 @@ const HealthInsuranceForm = ({ onSuccess, editingPolicy }) => {
 
     return (
         <div>
-            {error && <div className="alert alert-error">{error}</div>}
-            {success && <div className="alert alert-success">{success}</div>}
-
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label className="form-label required">Policy Start Date</label>

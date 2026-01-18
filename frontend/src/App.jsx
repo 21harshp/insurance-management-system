@@ -4,6 +4,8 @@ import ProtectedRoute from './components/Common/ProtectedRoute';
 import Login from './components/Auth/Login';
 import AdminDashboard from './components/Admin/AdminDashboard';
 import SalesManagerDashboard from './components/SalesManager/SalesManagerDashboard';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
 function App() {
@@ -35,6 +37,7 @@ function App() {
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
+      <ToastContainer />
     </AuthProvider>
   );
 }

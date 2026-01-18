@@ -24,6 +24,7 @@ const SalesManagerDashboard = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+
     return (
         <div>
             <Navbar onChangePassword={() => setShowChangePassword(true)} />

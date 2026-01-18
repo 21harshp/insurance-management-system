@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { healthInsuranceAPI } from '../../services/api';
+import { errorMessage, successMessage } from '../../utils/message';
 
 const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
     const [policies, setPolicies] = useState([]);
@@ -38,6 +39,21 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
             setLoading(false);
         }
     };
+
+    const handleDelete = async (policy) => {
+        try {
+            console.log(policy)
+            const response = await healthInsuranceAPI.delete(policy._id)
+            console.log(response)
+            if (response.status === 200) {
+                successMessage(response?.data?.data?.message || 'Policy deleted successfully')
+                fetchPolicies()
+            }
+        } catch (err) {
+            console.error('Failed to delete policy:', err);
+            errorMessage(err?.response?.data?.message || 'Failed to delete policy')
+        }
+    }
 
     useEffect(() => {
         fetchPolicies();
@@ -165,6 +181,13 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
                                                     Renew
                                                 </button>
                                             )}
+                                            <button
+                                                className="btn btn-sm btn-danger"
+                                                onClick={() => handleDelete(policy)}
+                                            >
+                                                Delete
+                                            </button>
+
                                         </div>
                                     </td>
                                 </tr>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motorInsuranceAPI } from '../../services/api';
+import { errorMessage, successMessage } from '../../utils/message';
 
 const MotorInsuranceForm = ({ onSuccess, editingPolicy }) => {
     const [formData, setFormData] = useState({
@@ -52,13 +53,11 @@ const MotorInsuranceForm = ({ onSuccess, editingPolicy }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
-        setSuccess('');
         setLoading(true);
 
         try {
             await motorInsuranceAPI.create(formData);
-            setSuccess('Motor insurance policy created successfully');
+            successMessage('Motor insurance policy created successfully');
             setFormData({
                 registrationNumber: '',
                 policyStartDate: '',
@@ -76,21 +75,19 @@ const MotorInsuranceForm = ({ onSuccess, editingPolicy }) => {
                 policyCopyLink: '',
             });
             setTimeout(() => {
-                setSuccess('');
                 onSuccess();
             }, 2000);
         } catch (err) {
-            setError(err.response?.data?.message || 'Failed to create policy');
+            errorMessage(err.response?.data?.message || 'Failed to create policy');
         } finally {
             setLoading(false);
         }
     };
 
+
+
     return (
         <div>
-            {error && <div className="alert alert-error">{error}</div>}
-            {success && <div className="alert alert-success">{success}</div>}
-
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label className="form-label required">Car/Bike Registration Number</label>
@@ -279,6 +276,7 @@ const MotorInsuranceForm = ({ onSuccess, editingPolicy }) => {
                 >
                     {loading ? 'Saving...' : editingPolicy ? 'Create Renewed Policy' : 'Create Policy'}
                 </button>
+
             </form>
         </div>
     );
