@@ -87,7 +87,7 @@ Click **"Environment Variables"** and add these:
 |------|-------|
 | `MONGODB_URI` | `mongodb+srv://harshrpatel305_db_user:Harsh%402142@cluster0.kx5hweh.mongodb.net/insurance_management?retryWrites=true&w=majority&appName=Cluster0` |
 | `JWT_SECRET` | `your_secure_jwt_secret_change_in_production_123456` |
-| `ADMIN_ID` | `ADMIN` |
+| `ADMIN_ID` | `ADMIN` |what 
 | `ADMIN_PASSWORD` | `admin123` (or your secure password) |
 | `FRONTEND_URL` | `*` (temporary - will update after frontend deployment) |
 

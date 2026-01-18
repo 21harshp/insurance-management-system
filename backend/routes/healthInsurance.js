@@ -6,15 +6,25 @@ const { auth } = require('../middleware/auth');
 // Get all health insurance policies for logged-in user
 router.get('/', auth, async (req, res) => {
     try {
-        const { month, search } = req.query;
+        const { month, year, search } = req.query;
         let query = { createdBy: req.userId };
 
-        // Filter by month if provided
-        if (month) {
+        // Filter by month and year if provided
+        if (month !== undefined && month !== '') {
             const monthNum = parseInt(month);
-            const year = new Date().getFullYear();
-            const startDate = new Date(year, monthNum, 1);
-            const endDate = new Date(year, monthNum + 1, 0);
+            const yearNum = year ? parseInt(year) : new Date().getFullYear();
+            const startDate = new Date(yearNum, monthNum, 1);
+            const endDate = new Date(yearNum, monthNum + 1, 0);
+
+            query.policyEndDate = {
+                $gte: startDate,
+                $lte: endDate,
+            };
+        } else if (year) {
+            // Filter by year only if month is not provided
+            const yearNum = parseInt(year);
+            const startDate = new Date(yearNum, 0, 1);
+            const endDate = new Date(yearNum, 11, 31, 23, 59, 59);
 
             query.policyEndDate = {
                 $gte: startDate,
