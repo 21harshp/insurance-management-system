@@ -321,6 +321,34 @@ h4 {
   color: var(--text-muted);
 }
 
+/* Month Input Styling */
+.form-input[type="month"] {
+  position: relative;
+  color-scheme: dark;
+  min-width: 180px;
+}
+
+.form-input[type="month"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8);
+  cursor: pointer;
+}
+
+.form-input[type="month"]::-webkit-datetime-edit-fields-wrapper {
+  color: var(--text-primary);
+}
+
+.form-input[type="month"]::-webkit-datetime-edit-text,
+.form-input[type="month"]::-webkit-datetime-edit-month-field,
+.form-input[type="month"]::-webkit-datetime-edit-year-field {
+  color: var(--text-primary);
+  padding: 0 2px;
+}
+
+/* Hide placeholder when empty */
+.form-input[type="month"]:not(:focus):invalid {
+  color: transparent;
+}
+
 .form-error {
   color: #ef4444;
   font-size: 0.8125rem;

@@ -6,29 +6,22 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
     const [policies, setPolicies] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchName, setSearchName] = useState('');
-    const [selectedMonth, setSelectedMonth] = useState('');
+    const [selectedMonthYear, setSelectedMonthYear] = useState('');
 
-    const months = [
-        { value: '', label: 'All Months' },
-        { value: '0', label: 'January' },
-        { value: '1', label: 'February' },
-        { value: '2', label: 'March' },
-        { value: '3', label: 'April' },
-        { value: '4', label: 'May' },
-        { value: '5', label: 'June' },
-        { value: '6', label: 'July' },
-        { value: '7', label: 'August' },
-        { value: '8', label: 'September' },
-        { value: '9', label: 'October' },
-        { value: '10', label: 'November' },
-        { value: '11', label: 'December' },
-    ];
+
 
     const fetchPolicies = async () => {
         try {
             setLoading(true);
             const params = {};
-            if (selectedMonth !== '') params.month = selectedMonth;
+
+            // Parse month-year picker value (format: YYYY-MM)
+            if (selectedMonthYear) {
+                const [year, month] = selectedMonthYear.split('-');
+                params.year = year;
+                params.month = parseInt(month) - 1; // Convert to 0-indexed month
+            }
+
             if (searchName) params.search = searchName;
 
             const response = await healthInsuranceAPI.getAll(params);
@@ -57,7 +50,7 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
 
     useEffect(() => {
         fetchPolicies();
-    }, [refreshTrigger, selectedMonth, searchName]);
+    }, [refreshTrigger, selectedMonthYear, searchName]);
 
     const shouldShowRenewButton = (policyEndDate) => {
         const currentDate = new Date();
@@ -104,18 +97,40 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
                         onChange={(e) => setSearchName(e.target.value)}
                     />
                 </div>
-                <div className="form-group" style={{ marginBottom: 0, minWidth: '200px' }}>
-                    <select
-                        className="form-select"
-                        value={selectedMonth}
-                        onChange={(e) => setSelectedMonth(e.target.value)}
-                    >
-                        {months.map((month) => (
-                            <option key={month.value} value={month.value}>
-                                {month.label}
-                            </option>
-                        ))}
-                    </select>
+                <div className="form-group" style={{ marginBottom: 0, minWidth: '220px', position: 'relative' }}>
+                    <div style={{ position: 'relative' }}>
+                        <input
+                            type="month"
+                            className="form-input"
+                            value={selectedMonthYear}
+                            onChange={(e) => setSelectedMonthYear(e.target.value)}
+                            title="Click to select month and year"
+                            style={{ paddingRight: selectedMonthYear ? '2.5rem' : '1rem', cursor: 'pointer' }}
+                            onKeyDown={(e) => e.preventDefault()}
+                        />
+                        {selectedMonthYear && (
+                            <button
+                                onClick={() => setSelectedMonthYear('')}
+                                className="btn btn-sm"
+                                style={{
+                                    position: 'absolute',
+                                    right: '0.5rem',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    padding: '0.25rem 0.5rem',
+                                    fontSize: '0.75rem',
+                                    background: 'var(--bg-tertiary)',
+                                    border: 'none',
+                                    color: 'var(--text-muted)',
+                                    cursor: 'pointer',
+                                    borderRadius: 'var(--radius-sm)'
+                                }}
+                                title="Clear filter"
+                            >
+                                ✕
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
 
