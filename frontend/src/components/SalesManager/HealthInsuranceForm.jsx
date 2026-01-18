@@ -92,6 +92,7 @@ const HealthInsuranceForm = ({ onSuccess, editingPolicy }) => {
                         className="form-input"
                         value={formData.policyStartDate}
                         onChange={handleChange}
+                        placeholder="dd/mm/yyyy"
                         required
                     />
                 </div>
@@ -104,6 +105,7 @@ const HealthInsuranceForm = ({ onSuccess, editingPolicy }) => {
                         className="form-input"
                         value={formData.policyEndDate}
                         onChange={handleChange}
+                        placeholder="dd/mm/yyyy"
                         required
                     />
                 </div>
@@ -142,6 +144,7 @@ const HealthInsuranceForm = ({ onSuccess, editingPolicy }) => {
                         className="form-input"
                         value={formData.policyHolderDOB}
                         onChange={handleChange}
+                        placeholder="dd/mm/yyyy"
                         required
                     />
                 </div>
@@ -167,6 +170,7 @@ const HealthInsuranceForm = ({ onSuccess, editingPolicy }) => {
                         className="form-input"
                         value={formData.nomineeDOB}
                         onChange={handleChange}
+                        placeholder="dd/mm/yyyy"
                         required
                     />
                 </div>

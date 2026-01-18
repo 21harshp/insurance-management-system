@@ -298,6 +298,29 @@ h4 {
   min-height: 100px;
 }
 
+/* Date Input Styling */
+.form-input[type="date"] {
+  position: relative;
+  color-scheme: dark;
+}
+
+.form-input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8);
+  cursor: pointer;
+}
+
+.form-input[type="date"]::-webkit-datetime-edit-text,
+.form-input[type="date"]::-webkit-datetime-edit-month-field,
+.form-input[type="date"]::-webkit-datetime-edit-day-field,
+.form-input[type="date"]::-webkit-datetime-edit-year-field {
+  color: var(--text-primary);
+}
+
+/* Style for empty date inputs */
+.form-input[type="date"]:not(:focus):invalid {
+  color: var(--text-muted);
+}
+
 .form-error {
   color: #ef4444;
   font-size: 0.8125rem;
