@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motorInsuranceAPI } from '../../services/api';
 import { errorMessage, successMessage } from '../../utils/message';
+import DateInput from '../Common/DateInput';
 
 const MotorInsuranceForm = ({ onSuccess, editingPolicy }) => {
     const [formData, setFormData] = useState({
@@ -104,26 +105,22 @@ const MotorInsuranceForm = ({ onSuccess, editingPolicy }) => {
 
                 <div className="form-group">
                     <label className="form-label required">Policy Start Date</label>
-                    <input
-                        type="date"
+                    <DateInput
                         name="policyStartDate"
                         className="form-input"
                         value={formData.policyStartDate}
                         onChange={handleChange}
-                        placeholder="dd/mm/yyyy"
                         required
                     />
                 </div>
 
                 <div className="form-group">
                     <label className="form-label required">Policy End Date</label>
-                    <input
-                        type="date"
+                    <DateInput
                         name="policyEndDate"
                         className="form-input"
                         value={formData.policyEndDate}
                         onChange={handleChange}
-                        placeholder="dd/mm/yyyy"
                         required
                     />
                 </div>
@@ -182,13 +179,11 @@ const MotorInsuranceForm = ({ onSuccess, editingPolicy }) => {
 
                 <div className="form-group">
                     <label className="form-label required">Policy Holder DOB</label>
-                    <input
-                        type="date"
+                    <DateInput
                         name="policyHolderDOB"
                         className="form-input"
                         value={formData.policyHolderDOB}
                         onChange={handleChange}
-                        placeholder="dd/mm/yyyy"
                         required
                     />
                 </div>
@@ -208,13 +203,11 @@ const MotorInsuranceForm = ({ onSuccess, editingPolicy }) => {
 
                 <div className="form-group">
                     <label className="form-label required">Nominee DOB</label>
-                    <input
-                        type="date"
+                    <DateInput
                         name="nomineeDOB"
                         className="form-input"
                         value={formData.nomineeDOB}
                         onChange={handleChange}
-                        placeholder="dd/mm/yyyy"
                         required
                     />
                 </div>
