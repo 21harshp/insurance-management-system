@@ -9,7 +9,16 @@ const Navbar = ({ onChangePassword }) => {
         <nav className="navbar">
             <div className="navbar-container">
                 <div className="navbar-brand">
-                    <h2>Insurance Management System</h2>
+                    <img
+                        src="/navbar.jpg"
+                        alt="Logo"
+                        style={{
+                            width: '190px',
+                            height: '60px',
+                            objectFit: 'contain',
+                            borderRadius: '8px'
+                        }}
+                    />
                 </div>
 
                 <div className="navbar-menu">

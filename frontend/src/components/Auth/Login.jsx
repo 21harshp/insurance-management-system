@@ -38,7 +38,17 @@ const Login = () => {
         <div className="login-container">
             <div className="login-card">
                 <div className="login-header">
-                    <h1>Insurance Management System</h1>
+                    <img
+                        src="/logo.jpg"
+                        alt="Insurance Management System Logo"
+                        style={{
+                            width: '180px',
+                            height: '180px',
+                            objectFit: 'contain',
+                            // marginBottom: '1.5rem',
+                            borderRadius: '12px'
+                        }}
+                    />
                     <p>Sign in to your account</p>
                 </div>
 
