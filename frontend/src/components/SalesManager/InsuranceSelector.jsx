@@ -17,6 +17,13 @@ const InsuranceSelector = ({ selected, onChange }) => {
                 <span className="selector-icon">🚗</span>
                 Motor Insurance
             </button>
+            <button
+                className={`selector-btn ${selected === 'life' ? 'active' : ''}`}
+                onClick={() => onChange('life')}
+            >
+                <span className="selector-icon">🛡️</span>
+                Life Insurance
+            </button>
         </div>
     );
 };

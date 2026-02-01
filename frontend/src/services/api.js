@@ -52,4 +52,12 @@ export const motorInsuranceAPI = {
     delete: (id) => api.delete(`/motor-insurance/${id}`),
 };
 
+// Life Insurance APIs
+export const lifeInsuranceAPI = {
+    getAll: (params) => api.get('/life-insurance', { params }),
+    create: (data) => api.post('/life-insurance', data),
+    update: (id, data) => api.put(`/life-insurance/${id}`, data),
+    delete: (id) => api.delete(`/life-insurance/${id}`),
+};
+
 export default api;

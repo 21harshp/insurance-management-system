@@ -8,6 +8,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const healthInsuranceRoutes = require('./routes/healthInsurance');
 const motorInsuranceRoutes = require('./routes/motorInsurance');
+const lifeInsuranceRoutes = require('./routes/lifeInsurance');
 
 const app = express();
 
@@ -50,6 +51,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/health-insurance', healthInsuranceRoutes);
 app.use('/api/motor-insurance', motorInsuranceRoutes);
+app.use('/api/life-insurance', lifeInsuranceRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {

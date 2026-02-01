@@ -6,6 +6,8 @@ import HealthInsuranceForm from './HealthInsuranceForm';
 import HealthInsuranceTable from './HealthInsuranceTable';
 import MotorInsuranceForm from './MotorInsuranceForm';
 import MotorInsuranceTable from './MotorInsuranceTable';
+import LifeInsuranceForm from './LifeInsuranceForm';
+import LifeInsuranceTable from './LifeInsuranceTable';
 import './SalesManagerDashboard.css';
 
 const SalesManagerDashboard = () => {
@@ -60,8 +62,13 @@ const SalesManagerDashboard = () => {
                                     onSuccess={handlePolicyCreated}
                                     editingPolicy={editingPolicy}
                                 />
-                            ) : (
+                            ) : insuranceType === 'motor' ? (
                                 <MotorInsuranceForm
+                                    onSuccess={handlePolicyCreated}
+                                    editingPolicy={editingPolicy}
+                                />
+                            ) : (
+                                <LifeInsuranceForm
                                     onSuccess={handlePolicyCreated}
                                     editingPolicy={editingPolicy}
                                 />
@@ -73,7 +80,7 @@ const SalesManagerDashboard = () => {
                         <div className="card">
                             <div className="card-header">
                                 <h3 className="card-title">
-                                    {insuranceType === 'health' ? 'Health' : 'Motor'} Insurance Policies
+                                    {insuranceType === 'health' ? 'Health' : insuranceType === 'motor' ? 'Motor' : 'Life'} Insurance Policies
                                 </h3>
                             </div>
 
@@ -82,8 +89,13 @@ const SalesManagerDashboard = () => {
                                     refreshTrigger={refreshTrigger}
                                     onRenew={handleRenew}
                                 />
-                            ) : (
+                            ) : insuranceType === 'motor' ? (
                                 <MotorInsuranceTable
+                                    refreshTrigger={refreshTrigger}
+                                    onRenew={handleRenew}
+                                />
+                            ) : (
+                                <LifeInsuranceTable
                                     refreshTrigger={refreshTrigger}
                                     onRenew={handleRenew}
                                 />
