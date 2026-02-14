@@ -1,40 +1,61 @@
 /* Import application color variables */
 @import url('../../App.css');
 
+/* ---------- Keyframes ---------- */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
 /* ---------- Pricing Page Container ---------- */
 .pricing-page {
     min-height: 100vh;
-    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 30%, #fce7f3 60%, #e0f2fe 100%);
+    background-size: 300% 300%;
+    animation: gradientShift 12s ease infinite;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 /* ---------- Pricing Navigation ---------- */
 .pricing-nav {
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 100;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    left: 0;
+    right: 0;
+    z-index: 1000;
     padding: 1rem 2rem;
-}
-
-.pricing-nav-content {
-    max-width: 1200px;
-    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: all 0.4s ease;
+    background: transparent;
 }
 
-.pricing-nav-brand {
-    cursor: pointer;
+.pricing-nav.scrolled {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+    padding: 0.65rem 2rem;
 }
 
-.pricing-nav-logo {
-    height: 45px;
-    width: auto;
+.pricing-nav-logo img {
+    height: 50px;
     object-fit: contain;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.pricing-nav-logo img:hover {
+    transform: scale(1.05);
 }
 
 .pricing-nav-actions {
@@ -81,7 +102,7 @@
 
 /* ---------- Pricing Section ---------- */
 .pricing-section-wrapper {
-    padding: 6rem 2rem;
+    padding: 8rem 2rem 6rem;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -103,7 +124,7 @@
 }
 
 .pricing-section-title {
-    font-size: 3rem;
+    font-size: 2.8rem;
     font-weight: 800;
     margin-bottom: 1rem;
     color: var(--text-primary);
@@ -214,6 +235,15 @@
 .pricing-icon {
     font-size: 2.5rem;
     margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pricing-icon img {
+    max-width: 50px;
+    height: auto;
+    object-fit: contain;
 }
 
 .pricing-plan-name {

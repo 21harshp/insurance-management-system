@@ -117,6 +117,9 @@ const LandingPage = () => {
                             Streamline your insurance operations with our powerful management system.
                             From health to motor and life insurance — everything in one place.
                         </p>
+                        <p className="hero-subtitle" style={{ marginTop: '-30px', color: '#1e3867' }}>
+                            Your privacy is our priority. Enterprise-grade security included.
+                        </p>
                         <div className="hero-buttons">
                             <button className="hero-btn-primary" onClick={() => navigate('/login')}>
                                 Get Started →
@@ -161,34 +164,40 @@ const LandingPage = () => {
 
                 <div className="features-grid">
                     <div className="feature-card reveal reveal-delay-1">
-                        <div className="feature-icon">🏥</div>
+                        <div className="feature-icon">
+                            <img src="/health-insurance.png" alt="Health Insurance" />
+                        </div>
                         <h3 className="feature-title">Health Insurance</h3>
                         <p className="feature-desc">
                             Comprehensive healthcare coverage with cashless hospitalization, preventive care, and critical illness protection for your entire family.
                         </p>
-                        <a className="feature-link" onClick={() => navigate('/login')}>
+                        <a className="feature-link" onClick={() => navigate('/pricing')}>
                             Explore Plans →
                         </a>
                     </div>
 
                     <div className="feature-card reveal reveal-delay-2">
-                        <div className="feature-icon">🚗</div>
+                        <div className="feature-icon">
+                            <img src="/motor-insurance.png" alt="Motor Insurance" />
+                        </div>
                         <h3 className="feature-title">Motor Insurance</h3>
                         <p className="feature-desc">
                             Complete protection for your vehicles with collision coverage, third-party liability, roadside assistance, and hassle-free claim settlement.
                         </p>
-                        <a className="feature-link" onClick={() => navigate('/login')}>
+                        <a className="feature-link" onClick={() => navigate('/pricing')}>
                             Explore Plans →
                         </a>
                     </div>
 
                     <div className="feature-card reveal reveal-delay-3">
-                        <div className="feature-icon">🛡️</div>
+                        <div className="feature-icon">
+                            <img src="/life-insurance.png" alt="Life Insurance" />
+                        </div>
                         <h3 className="feature-title">Life Insurance</h3>
                         <p className="feature-desc">
                             Secure your family's future with term life, whole life, and endowment plans. Flexible premiums with guaranteed returns and tax benefits.
                         </p>
-                        <a className="feature-link" onClick={() => navigate('/login')}>
+                        <a className="feature-link" onClick={() => navigate('/pricing')}>
                             Explore Plans →
                         </a>
                     </div>
@@ -366,9 +375,10 @@ const LandingPage = () => {
                     </div>
 
                     <div className="footer-col">
-                        <h4>Support</h4>
+                        <h4>Contact Us</h4>
+                        <a href="mailto:mlcandteam@gmail.com">📧 mlcandteam@gmail.com</a>
+                        <a href="tel:+919825384548">📱 +91 9825384548</a>
                         <a href="#features">Help Center</a>
-                        <a href="#features">Contact Us</a>
                         <a href="#features">FAQs</a>
                     </div>
                 </div>
