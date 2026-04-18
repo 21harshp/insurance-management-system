@@ -7,6 +7,7 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
     const [loading, setLoading] = useState(true);
     const [searchName, setSearchName] = useState('');
     const [selectedMonthYear, setSelectedMonthYear] = useState('');
+    const [expandedRow, setExpandedRow] = useState(null);
 
 
 
@@ -67,6 +68,10 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
             (endMonth === 11 ? currentYear === endYear + 1 : currentYear === endYear);
 
         return sameMonthYear || nextMonth;
+    };
+
+    const toggleRowExpansion = (policyId) => {
+        setExpandedRow(expandedRow === policyId ? null : policyId);
     };
 
     const formatDate = (dateString) => {
@@ -155,57 +160,118 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
                         </thead>
                         <tbody>
                             {policies.map((policy) => (
-                                <tr key={policy._id}>
-                                    <td>
-                                        <div>
-                                            <div style={{ fontWeight: 500 }}>{policy.policyHolderName}</div>
-                                            <div className="text-muted" style={{ fontSize: '0.75rem' }}>
-                                                DOB: {formatDate(policy.policyHolderDOB)}
+                                <>
+                                    <tr key={policy._id}>
+                                        <td>
+                                            <div>
+                                                <div style={{ fontWeight: 500 }}>{policy.policyHolderName}</div>
+                                                <div className="text-muted" style={{ fontSize: '0.75rem' }}>
+                                                    DOB: {formatDate(policy.policyHolderDOB)}
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>{policy.mobileNumber}</td>
-                                    <td>{policy.companyName}</td>
-                                    <td>{policy.tpaName}</td>
-                                    <td>{formatDate(policy.policyStartDate)}</td>
-                                    <td>
-                                        <span className={
-                                            new Date(policy.policyEndDate) < new Date()
-                                                ? 'badge badge-danger'
-                                                : 'badge badge-success'
-                                        }>
-                                            {formatDate(policy.policyEndDate)}
-                                        </span>
-                                    </td>
-                                    <td>₹{policy.premiumAmount.toLocaleString()}</td>
-                                    <td>
-                                        <div className="flex gap-1">
-                                            <a
-                                                href={policy.policyCopyLink}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="btn btn-sm btn-outline"
-                                            >
-                                                View
-                                            </a>
-                                            {shouldShowRenewButton(policy.policyEndDate) && (
+                                        </td>
+                                        <td>{policy.mobileNumber}</td>
+                                        <td>{policy.companyName}</td>
+                                        <td>{policy.tpaName}</td>
+                                        <td>{formatDate(policy.policyStartDate)}</td>
+                                        <td>
+                                            <span className={
+                                                new Date(policy.policyEndDate) < new Date()
+                                                    ? 'badge badge-danger'
+                                                    : 'badge badge-success'
+                                            }>
+                                                {formatDate(policy.policyEndDate)}
+                                            </span>
+                                        </td>
+                                        <td>₹{policy.premiumAmount.toLocaleString()}</td>
+                                        <td>
+                                            <div className="flex gap-1">
                                                 <button
-                                                    className="btn btn-sm btn-accent"
-                                                    onClick={() => onRenew(policy)}
+                                                    className="btn btn-sm btn-outline"
+                                                    onClick={() => toggleRowExpansion(policy._id)}
                                                 >
-                                                    Renew
+                                                    {expandedRow === policy._id ? 'Hide' : 'Details'}
                                                 </button>
-                                            )}
-                                            <button
-                                                className="btn btn-sm btn-danger"
-                                                onClick={() => handleDelete(policy)}
-                                            >
-                                                Delete
-                                            </button>
-
-                                        </div>
-                                    </td>
-                                </tr>
+                                                <a
+                                                    href={policy.policyCopyLink}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="btn btn-sm btn-outline"
+                                                >
+                                                    View
+                                                </a>
+                                                {shouldShowRenewButton(policy.policyEndDate) && (
+                                                    <button
+                                                        className="btn btn-sm btn-accent"
+                                                        onClick={() => onRenew(policy)}
+                                                    >
+                                                        Renew
+                                                    </button>
+                                                )}
+                                                <button
+                                                    className="btn btn-sm btn-danger"
+                                                    onClick={() => handleDelete(policy)}
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {expandedRow === policy._id && (
+                                        <tr>
+                                            <td colSpan="8" style={{ backgroundColor: 'var(--bg-secondary)', padding: '1.5rem' }}>
+                                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+                                                    <div>
+                                                        <strong>Policy Holder Name:</strong>
+                                                        <div>{policy.policyHolderName}</div>
+                                                    </div>
+                                                    <div>
+                                                        <strong>Policy Holder DOB:</strong>
+                                                        <div>{formatDate(policy.policyHolderDOB)}</div>
+                                                    </div>
+                                                    <div>
+                                                        <strong>Mobile Number:</strong>
+                                                        <div>{policy.mobileNumber}</div>
+                                                    </div>
+                                                    <div>
+                                                        <strong>Company Name:</strong>
+                                                        <div>{policy.companyName}</div>
+                                                    </div>
+                                                    <div>
+                                                        <strong>TPA Name:</strong>
+                                                        <div>{policy.tpaName}</div>
+                                                    </div>
+                                                    <div>
+                                                        <strong>Policy Start Date:</strong>
+                                                        <div>{formatDate(policy.policyStartDate)}</div>
+                                                    </div>
+                                                    <div>
+                                                        <strong>Policy End Date:</strong>
+                                                        <div>{formatDate(policy.policyEndDate)}</div>
+                                                    </div>
+                                                    <div>
+                                                        <strong>Premium Amount:</strong>
+                                                        <div>₹{policy.premiumAmount.toLocaleString()}</div>
+                                                    </div>
+                                                    <div>
+                                                        <strong>Nominee Name:</strong>
+                                                        <div>{policy.nomineeName}</div>
+                                                    </div>
+                                                    <div>
+                                                        <strong>Nominee DOB:</strong>
+                                                        <div>{formatDate(policy.nomineeDOB)}</div>
+                                                    </div>
+                                                    {policy.agentName && (
+                                                        <div>
+                                                            <strong>Agent Name:</strong>
+                                                            <div>{policy.agentName}</div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )}
+                                </>
                             ))}
                         </tbody>
                     </table>
