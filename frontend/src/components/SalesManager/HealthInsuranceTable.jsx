@@ -8,6 +8,8 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
     const [loading, setLoading] = useState(true);
     const [searchName, setSearchName] = useState('');
     const [selectedMonthYear, setSelectedMonthYear] = useState('');
+    const [appliedSearch, setAppliedSearch] = useState('');
+    const [appliedMonthYear, setAppliedMonthYear] = useState('');
     const [expandedRow, setExpandedRow] = useState(null);
 
 
@@ -18,13 +20,13 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
             const params = {};
 
             // Parse month-year picker value (format: YYYY-MM)
-            if (selectedMonthYear) {
-                const [year, month] = selectedMonthYear.split('-');
+            if (appliedMonthYear) {
+                const [year, month] = appliedMonthYear.split('-');
                 params.year = year;
-                params.month = parseInt(month) - 1; // Convert to 0-indexed month
+                params.month = parseInt(month) - 1;
             }
 
-            if (searchName) params.search = searchName;
+            if (appliedSearch) params.search = appliedSearch;
 
             const response = await healthInsuranceAPI.getAll(params);
             setPolicies(response.data);
@@ -52,7 +54,24 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
 
     useEffect(() => {
         fetchPolicies();
-    }, [refreshTrigger, selectedMonthYear, searchName]);
+    }, [refreshTrigger, appliedSearch, appliedMonthYear]);
+
+    const handleSearch = () => {
+        setAppliedSearch(searchName);
+        setAppliedMonthYear(selectedMonthYear);
+    };
+
+    const handleClearMonth = () => {
+        setSelectedMonthYear('');
+        setAppliedMonthYear('');
+    };
+
+    const handleReset = () => {
+        setSearchName('');
+        setSelectedMonthYear('');
+        setAppliedSearch('');
+        setAppliedMonthYear('');
+    };
 
     const shouldShowRenewButton = (policyEndDate) => {
         const currentDate = new Date();
@@ -112,7 +131,7 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
 
     return (
         <div>
-            <div className="flex gap-3 mb-4" style={{ marginBottom: '1.5rem', alignItems: 'flex-start' }}>
+            <div className="flex gap-3 mb-4" style={{ marginBottom: '1.5rem', alignItems: 'center' }}>
                 <div className="form-group" style={{ marginBottom: 0, flex: 1 }}>
                     <input
                         type="text"
@@ -120,6 +139,7 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
                         placeholder="Search by policy holder name..."
                         value={searchName}
                         onChange={(e) => setSearchName(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                     />
                 </div>
                 <div className="form-group" style={{ marginBottom: 0, minWidth: '220px', position: 'relative' }}>
@@ -135,7 +155,7 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
                         />
                         {selectedMonthYear && (
                             <button
-                                onClick={() => setSelectedMonthYear('')}
+                                onClick={handleClearMonth}
                                 className="btn btn-sm"
                                 style={{
                                     position: 'absolute',
@@ -157,6 +177,20 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
                         )}
                     </div>
                 </div>
+                <button
+                    className="btn btn-primary btn-sm"
+                    onClick={handleSearch}
+                    style={{ whiteSpace: 'nowrap' }}
+                >
+                    Search
+                </button>
+                <button
+                    className="btn btn-sm"
+                    onClick={handleReset}
+                    style={{ whiteSpace: 'nowrap', border: '1px solid #fecaca', color: '#ef4444', background: 'var(--bg-tertiary)' }}
+                >
+                    Reset
+                </button>
                 <button
                     onClick={handleExport}
                     disabled={policies.length === 0}
