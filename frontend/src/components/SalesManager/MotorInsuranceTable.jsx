@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motorInsuranceAPI } from '../../services/api';
 import { errorMessage, successMessage } from '../../utils/message';
+import { exportToExcel } from '../../utils/exportExcel';
 
 const MotorInsuranceTable = ({ refreshTrigger, onRenew }) => {
     const [policies, setPolicies] = useState([]);
@@ -73,6 +74,27 @@ const MotorInsuranceTable = ({ refreshTrigger, onRenew }) => {
         setExpandedRow(expandedRow === policyId ? null : policyId);
     };
 
+    const handleExport = () => {
+        const rows = policies.map((p) => ({
+            'Registration Number': p.registrationNumber || '',
+            'Policy Number': p.policyNumber || '',
+            'Policy Holder Name': p.policyHolderName || '',
+            'Policy Holder DOB': formatDate(p.policyHolderDOB),
+            'Mobile Number': p.mobileNumber || '',
+            'Insurance Company': p.insuranceCompanyName || '',
+            'Service Provider': p.serviceProviderCompanyName || '',
+            'Policy Start Date': formatDate(p.policyStartDate),
+            'Policy End Date': formatDate(p.policyEndDate),
+            'Premium Amount': p.premiumAmount || '',
+            'Nominee Name': p.nomineeName || '',
+            'Nominee DOB': formatDate(p.nomineeDOB),
+            'Agent Name': p.agentName || '',
+            'Policy Copy Link': p.policyCopyLink || '',
+        }));
+        const label = selectedMonthYear ? `Motor_${selectedMonthYear}` : 'Motor_Insurance';
+        exportToExcel(rows, label);
+    };
+
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
@@ -91,7 +113,7 @@ const MotorInsuranceTable = ({ refreshTrigger, onRenew }) => {
 
     return (
         <div>
-            <div className="flex gap-3 mb-4" style={{ marginBottom: '1.5rem' }}>
+            <div className="flex gap-3 mb-4" style={{ marginBottom: '1.5rem', alignItems: 'flex-start' }}>
                 <div className="form-group" style={{ marginBottom: 0, flex: 1 }}>
                     <input
                         type="text"
@@ -136,6 +158,22 @@ const MotorInsuranceTable = ({ refreshTrigger, onRenew }) => {
                         )}
                     </div>
                 </div>
+                <button
+                    onClick={handleExport}
+                    disabled={policies.length === 0}
+                    title="Download filtered data as Excel"
+                    style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: policies.length === 0 ? 'not-allowed' : 'pointer',
+                        opacity: policies.length === 0 ? 0.4 : 1,
+                        padding: '0.25rem',
+                        display: 'flex',
+                        alignItems: 'center'
+                    }}
+                >
+                    <img src="/excel_icon.png" alt="Download Excel" style={{ width: '36px', height: '36px' }} />
+                </button>
             </div>
 
             {policies.length === 0 ? (

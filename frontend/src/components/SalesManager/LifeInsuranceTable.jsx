@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { lifeInsuranceAPI } from '../../services/api';
 import { errorMessage, successMessage } from '../../utils/message';
+import { exportToExcel } from '../../utils/exportExcel';
 
 const LifeInsuranceTable = ({ refreshTrigger }) => {
     const [policies, setPolicies] = useState([]);
@@ -65,6 +66,32 @@ const LifeInsuranceTable = ({ refreshTrigger }) => {
         setExpandedRow(expandedRow === policyId ? null : policyId);
     };
 
+    const handleExport = () => {
+        const rows = policies.map((p) => ({
+            'Policy Number': p.policyNumber || '',
+            'Policy Holder Name': p.policyHolderName || '',
+            'Date of Birth': formatDate(p.dateOfBirth),
+            'Mobile Number': p.mobileNumber || '',
+            'Address': p.policyHolderAddress || '',
+            'Plan / Term / PPT': p.planTermPPT || '',
+            'Date of Commencement': formatDate(p.dateOfCommencement),
+            'Payment Mode': p.paymentMode || '',
+            'Premium Amount': p.premiumAmount || '',
+            'Sum Assured': p.sumAssured || '',
+            'Maturity Amount': p.maturityAmount || '',
+            'First Unpaid Premium': formatDate(p.firstUnpaidPremium),
+            'Date of Last Premium': formatDate(p.dateOfLastPremium),
+            'Agent Code': p.agentCode || '',
+            'Nominee Name': p.nomineeName || '',
+            'Nominee Relation': p.nomineeRelation || '',
+            'Nominee DOB': formatDate(p.nomineeDOB),
+            'Document Link': p.document || '',
+            'Proposal Form Link': p.proposalForm || '',
+        }));
+        const label = selectedMonthYear ? `Life_${selectedMonthYear}` : 'Life_Insurance';
+        exportToExcel(rows, label);
+    };
+
     if (loading) {
         return (
             <div className="text-center" style={{ padding: '2rem' }}>
@@ -75,7 +102,7 @@ const LifeInsuranceTable = ({ refreshTrigger }) => {
 
     return (
         <div>
-            <div className="flex gap-3 mb-4" style={{ marginBottom: '1.5rem' }}>
+            <div className="flex gap-3 mb-4" style={{ marginBottom: '1.5rem', alignItems: 'flex-start' }}>
                 <div className="form-group" style={{ marginBottom: 0, flex: 1 }}>
                     <input
                         type="text"
@@ -120,6 +147,22 @@ const LifeInsuranceTable = ({ refreshTrigger }) => {
                         )}
                     </div>
                 </div>
+                <button
+                    onClick={handleExport}
+                    disabled={policies.length === 0}
+                    title="Download filtered data as Excel"
+                    style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: policies.length === 0 ? 'not-allowed' : 'pointer',
+                        opacity: policies.length === 0 ? 0.4 : 1,
+                        padding: '0.25rem',
+                        display: 'flex',
+                        alignItems: 'center'
+                    }}
+                >
+                    <img src="/excel_icon.png" alt="Download Excel" style={{ width: '36px', height: '36px' }} />
+                </button>
             </div>
 
             {policies.length === 0 ? (

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { healthInsuranceAPI } from '../../services/api';
 import { errorMessage, successMessage } from '../../utils/message';
+import { exportToExcel } from '../../utils/exportExcel';
 
 const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
     const [policies, setPolicies] = useState([]);
@@ -74,6 +75,25 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
         setExpandedRow(expandedRow === policyId ? null : policyId);
     };
 
+    const handleExport = () => {
+        const rows = policies.map((p) => ({
+            'Policy Holder Name': p.policyHolderName || '',
+            'Policy Holder DOB': formatDate(p.policyHolderDOB),
+            'Mobile Number': p.mobileNumber || '',
+            'Company Name': p.companyName || '',
+            'TPA Name': p.tpaName || '',
+            'Policy Start Date': formatDate(p.policyStartDate),
+            'Policy End Date': formatDate(p.policyEndDate),
+            'Premium Amount': p.premiumAmount || '',
+            'Nominee Name': p.nomineeName || '',
+            'Nominee DOB': formatDate(p.nomineeDOB),
+            'Agent Name': p.agentName || '',
+            'Policy Copy Link': p.policyCopyLink || '',
+        }));
+        const label = selectedMonthYear ? `Health_${selectedMonthYear}` : 'Health_Insurance';
+        exportToExcel(rows, label);
+    };
+
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
@@ -92,7 +112,7 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
 
     return (
         <div>
-            <div className="flex gap-3 mb-4" style={{ marginBottom: '1.5rem' }}>
+            <div className="flex gap-3 mb-4" style={{ marginBottom: '1.5rem', alignItems: 'flex-start' }}>
                 <div className="form-group" style={{ marginBottom: 0, flex: 1 }}>
                     <input
                         type="text"
@@ -137,6 +157,22 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
                         )}
                     </div>
                 </div>
+                <button
+                    onClick={handleExport}
+                    disabled={policies.length === 0}
+                    title="Download filtered data as Excel"
+                    style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: policies.length === 0 ? 'not-allowed' : 'pointer',
+                        opacity: policies.length === 0 ? 0.4 : 1,
+                        padding: '0.25rem',
+                        display: 'flex',
+                        alignItems: 'center'
+                    }}
+                >
+                    <img src="/excel_icon.png" alt="Download Excel" style={{ width: '36px', height: '36px' }} />
+                </button>
             </div>
 
             {policies.length === 0 ? (

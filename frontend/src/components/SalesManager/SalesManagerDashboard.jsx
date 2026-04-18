@@ -13,19 +13,27 @@ import './SalesManagerDashboard.css';
 const SalesManagerDashboard = () => {
     const [insuranceType, setInsuranceType] = useState('health');
     const [showChangePassword, setShowChangePassword] = useState(false);
+    const [showFormModal, setShowFormModal] = useState(false);
     const [editingPolicy, setEditingPolicy] = useState(null);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     const handlePolicyCreated = () => {
         setEditingPolicy(null);
+        setShowFormModal(false);
         setRefreshTrigger(prev => prev + 1);
     };
 
     const handleRenew = (policy) => {
         setEditingPolicy(policy);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setShowFormModal(true);
     };
 
+    const handleCloseModal = () => {
+        setShowFormModal(false);
+        setEditingPolicy(null);
+    };
+
+    const insuranceLabel = insuranceType === 'health' ? 'Health' : insuranceType === 'motor' ? 'Motor' : 'Life';
 
     return (
         <div>
@@ -34,76 +42,78 @@ const SalesManagerDashboard = () => {
             <div className="container">
                 <div className="dashboard-header">
                     <h1>Sales Manager Dashboard</h1>
-                    <InsuranceSelector
-                        selected={insuranceType}
-                        onChange={setInsuranceType}
-                    />
+                    <div className="dashboard-header-actions">
+                        <InsuranceSelector
+                            selected={insuranceType}
+                            onChange={setInsuranceType}
+                        />
+                        <button
+                            className="btn btn-primary"
+                            onClick={() => { setEditingPolicy(null); setShowFormModal(true); }}
+                        >
+                            + Create New Policy
+                        </button>
+                    </div>
                 </div>
 
-                <div className="dashboard-content">
-                    <div className="dashboard-form">
-                        <div className="card">
-                            <div className="card-header">
-                                <h3 className="card-title">
-                                    {editingPolicy ? 'Renew Policy' : 'Create New Policy'}
-                                </h3>
-                                {editingPolicy && (
-                                    <button
-                                        className="btn btn-sm btn-outline"
-                                        onClick={() => setEditingPolicy(null)}
-                                    >
-                                        Cancel
-                                    </button>
-                                )}
-                            </div>
-
-                            {insuranceType === 'health' ? (
-                                <HealthInsuranceForm
-                                    onSuccess={handlePolicyCreated}
-                                    editingPolicy={editingPolicy}
-                                />
-                            ) : insuranceType === 'motor' ? (
-                                <MotorInsuranceForm
-                                    onSuccess={handlePolicyCreated}
-                                    editingPolicy={editingPolicy}
-                                />
-                            ) : (
-                                <LifeInsuranceForm
-                                    onSuccess={handlePolicyCreated}
-                                    editingPolicy={editingPolicy}
-                                />
-                            )}
+                <div className="dashboard-table-full">
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">
+                                {insuranceLabel} Insurance Policies
+                            </h3>
                         </div>
-                    </div>
 
-                    <div className="dashboard-table">
-                        <div className="card">
-                            <div className="card-header">
-                                <h3 className="card-title">
-                                    {insuranceType === 'health' ? 'Health' : insuranceType === 'motor' ? 'Motor' : 'Life'} Insurance Policies
-                                </h3>
-                            </div>
-
-                            {insuranceType === 'health' ? (
-                                <HealthInsuranceTable
-                                    refreshTrigger={refreshTrigger}
-                                    onRenew={handleRenew}
-                                />
-                            ) : insuranceType === 'motor' ? (
-                                <MotorInsuranceTable
-                                    refreshTrigger={refreshTrigger}
-                                    onRenew={handleRenew}
-                                />
-                            ) : (
-                                <LifeInsuranceTable
-                                    refreshTrigger={refreshTrigger}
-                                    onRenew={handleRenew}
-                                />
-                            )}
-                        </div>
+                        {insuranceType === 'health' ? (
+                            <HealthInsuranceTable
+                                refreshTrigger={refreshTrigger}
+                                onRenew={handleRenew}
+                            />
+                        ) : insuranceType === 'motor' ? (
+                            <MotorInsuranceTable
+                                refreshTrigger={refreshTrigger}
+                                onRenew={handleRenew}
+                            />
+                        ) : (
+                            <LifeInsuranceTable
+                                refreshTrigger={refreshTrigger}
+                                onRenew={handleRenew}
+                            />
+                        )}
                     </div>
                 </div>
             </div>
+
+            {/* Create / Renew Policy Modal */}
+            {showFormModal && (
+                <div className="modal-overlay" onClick={handleCloseModal}>
+                    <div className="modal modal-lg" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3 className="modal-title">
+                                {editingPolicy ? `Renew ${insuranceLabel} Policy` : `Create New ${insuranceLabel} Policy`}
+                            </h3>
+                            <button className="modal-close" onClick={handleCloseModal}>×</button>
+                        </div>
+
+                        {insuranceType === 'health' ? (
+                            <HealthInsuranceForm
+                                onSuccess={handlePolicyCreated}
+                                editingPolicy={editingPolicy}
+                            />
+                        ) : insuranceType === 'motor' ? (
+                            <MotorInsuranceForm
+                                onSuccess={handlePolicyCreated}
+                                editingPolicy={editingPolicy}
+                            />
+                        ) : (
+                            <LifeInsuranceForm
+                                onSuccess={handlePolicyCreated}
+                                editingPolicy={editingPolicy}
+                            />
+                        )}
+                    </div>
+                </div>
+            )}
 
             <ChangePassword
                 isOpen={showChangePassword}
