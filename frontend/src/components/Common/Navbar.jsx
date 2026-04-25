@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import './Navbar.css';
 
@@ -30,13 +29,23 @@ const Navbar = ({ onChangePassword }) => {
                     </div>
 
                     {user?.role === 'salesManager' && (
-                        <button className="btn btn-outline btn-sm" onClick={onChangePassword}>
-                            Change Password
+                        <button
+                            className="btn btn-outline btn-sm navbar-icon-btn"
+                            onClick={onChangePassword}
+                            title="Change Password"
+                        >
+                            <span className="btn-label">Change Password</span>
+                            <span className="btn-icon-only">🔑</span>
                         </button>
                     )}
 
-                    <button className="btn btn-danger btn-sm" onClick={logout}>
-                        Logout
+                    <button
+                        className="btn btn-danger btn-sm navbar-icon-btn"
+                        onClick={logout}
+                        title="Logout"
+                    >
+                        <span className="btn-label">Logout</span>
+                        <span className="btn-icon-only">⏻</span>
                     </button>
                 </div>
             </div>

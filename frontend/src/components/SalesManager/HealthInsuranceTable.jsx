@@ -131,7 +131,7 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
 
     return (
         <div>
-            <div className="flex gap-3 mb-4" style={{ marginBottom: '1.5rem', alignItems: 'center' }}>
+            <div className="flex gap-3 mb-4 table-filters" style={{ marginBottom: '1.5rem', alignItems: 'center' }}>
                 <div className="form-group" style={{ marginBottom: 0, flex: 1 }}>
                     <input
                         type="text"
@@ -255,7 +255,7 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
                                         </td>
                                         <td>₹{policy.premiumAmount.toLocaleString()}</td>
                                         <td>
-                                            <div className="flex gap-1">
+                                            <div className="flex gap-1 table-row-actions">
                                                 <button
                                                     className="btn btn-sm btn-outline"
                                                     onClick={() => toggleRowExpansion(policy._id)}

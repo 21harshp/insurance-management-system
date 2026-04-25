@@ -63,11 +63,11 @@ const SalesManagerTable = ({ salesManagers, onPasswordReset }) => {
                             <td>{new Date(manager.createdAt).toLocaleDateString()}</td>
                             <td>
                                 {resetId === manager._id ? (
-                                    <div className="flex gap-1">
+                                    <div className="flex gap-1" style={{ flexWrap: 'wrap', alignItems: 'center' }}>
                                         <input
                                             type="password"
                                             className="form-input"
-                                            style={{ width: '150px', padding: '0.375rem 0.75rem' }}
+                                            style={{ width: '150px', minWidth: '120px', flex: '1 1 120px', padding: '0.375rem 0.75rem' }}
                                             placeholder="New password"
                                             value={newPassword}
                                             onChange={(e) => setNewPassword(e.target.value)}

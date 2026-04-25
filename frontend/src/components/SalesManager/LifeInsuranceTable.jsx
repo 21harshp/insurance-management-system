@@ -121,7 +121,7 @@ const LifeInsuranceTable = ({ refreshTrigger }) => {
 
     return (
         <div>
-            <div className="flex gap-3 mb-4" style={{ marginBottom: '1.5rem', alignItems: 'center' }}>
+            <div className="flex gap-3 mb-4 table-filters" style={{ marginBottom: '1.5rem', alignItems: 'center' }}>
                 <div className="form-group" style={{ marginBottom: 0, flex: 1 }}>
                     <input
                         type="text"
@@ -243,7 +243,7 @@ const LifeInsuranceTable = ({ refreshTrigger }) => {
                                         <td>{formatCurrency(policy.premiumAmount)}</td>
                                         <td>{formatCurrency(policy.sumAssured)}</td>
                                         <td>
-                                            <div className="flex gap-1">
+                                            <div className="flex gap-1 table-row-actions">
                                                 <button
                                                     className="btn btn-sm btn-outline"
                                                     onClick={() => toggleRowExpansion(policy._id)}

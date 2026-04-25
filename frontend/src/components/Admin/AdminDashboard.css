@@ -21,3 +21,23 @@
         grid-template-columns: 1fr;
     }
 }
+
+@media (max-width: 768px) {
+    .admin-header {
+        margin-bottom: 1.25rem;
+    }
+
+    .admin-content {
+        gap: 1.25rem;
+    }
+
+    .admin-section {
+        min-height: unset;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-header h1 {
+        font-size: 1.5rem;
+    }
+}
