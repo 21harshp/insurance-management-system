@@ -3,7 +3,7 @@ import { healthInsuranceAPI } from '../../services/api';
 import { errorMessage, successMessage } from '../../utils/message';
 import { exportToExcel } from '../../utils/exportExcel';
 
-const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
+const HealthInsuranceTable = ({ refreshTrigger, onRenew, onEdit }) => {
     const [policies, setPolicies] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchName, setSearchName] = useState('');
@@ -279,10 +279,46 @@ const HealthInsuranceTable = ({ refreshTrigger, onRenew }) => {
                                                     </button>
                                                 )}
                                                 <button
-                                                    className="btn btn-sm btn-danger"
-                                                    onClick={() => handleDelete(policy)}
+                                                    className="btn btn-sm btn-secondary"
+                                                    onClick={() => onEdit(policy)}
+                                                    title="Edit policy"
+                                                    aria-label="Edit policy"
+                                                    style={{
+                                                        background: '#f1f5f9',
+                                                        border: '1px solid #6366f1',
+                                                        color: '#6366f1',
+                                                        display: 'inline-flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        minWidth: '36px',
+                                                        padding: '0.35rem 0.5rem',
+                                                        boxShadow: 'none',
+                                                    }}
                                                 >
-                                                    Delete
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                        <path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75zM21.41 6.34l-3.75-3.75l-2.53 2.54l3.75 3.75z" />
+                                                    </svg>
+                                                </button>
+                                                <button
+                                                    className="btn btn-sm"
+                                                    onClick={() => handleDelete(policy)}
+                                                    title="Delete policy"
+                                                    aria-label="Delete policy"
+                                                    style={{
+                                                        background: '#fef2f2',
+                                                        border: '1px solid #ef4444',
+                                                        color: '#ef4444',
+                                                        display: 'inline-flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        minWidth: '36px',
+                                                        padding: '0.35rem 0.5rem',
+                                                        boxShadow: 'none',
+                                                    }}
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                        <path fill="currentColor" d="m20.37 8.91l-1 1.73l-12.13-7l1-1.73l3.04 1.75l1.36-.37l4.33 2.5l.37 1.37zM6 19V7h5.07L18 11v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2m2 0h8v-6.8L10.46 9H8z" />
+                                                    </svg>
                                                 </button>
                                             </div>
                                         </td>

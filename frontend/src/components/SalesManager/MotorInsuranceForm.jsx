@@ -3,7 +3,7 @@ import { motorInsuranceAPI } from '../../services/api';
 import { errorMessage, successMessage } from '../../utils/message';
 import DateInput from '../Common/DateInput';
 
-const MotorInsuranceForm = ({ onSuccess, editingPolicy }) => {
+const MotorInsuranceForm = ({ onSuccess, editingPolicy, formMode = 'create' }) => {
     const [formData, setFormData] = useState({
         registrationNumber: '',
         policyStartDate: '',
@@ -57,8 +57,13 @@ const MotorInsuranceForm = ({ onSuccess, editingPolicy }) => {
         setLoading(true);
 
         try {
-            await motorInsuranceAPI.create(formData);
-            successMessage('Motor insurance policy created successfully');
+            if (formMode === 'edit' && editingPolicy?._id) {
+                await motorInsuranceAPI.update(editingPolicy._id, formData);
+                successMessage('Motor insurance policy updated successfully');
+            } else {
+                await motorInsuranceAPI.create(formData);
+                successMessage('Motor insurance policy created successfully');
+            }
             setFormData({
                 registrationNumber: '',
                 policyStartDate: '',
@@ -271,7 +276,13 @@ const MotorInsuranceForm = ({ onSuccess, editingPolicy }) => {
                     className="btn btn-primary w-full"
                     disabled={loading}
                 >
-                    {loading ? 'Saving...' : editingPolicy ? 'Create Renewed Policy' : 'Create Policy'}
+                    {loading
+                        ? 'Saving...'
+                        : formMode === 'edit'
+                            ? 'Update Policy'
+                            : formMode === 'renew'
+                                ? 'Create Renewed Policy'
+                                : 'Create Policy'}
                 </button>
 
             </form>

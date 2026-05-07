@@ -3,7 +3,7 @@ import { healthInsuranceAPI } from '../../services/api';
 import { successMessage } from '../../utils/message';
 import DateInput from '../Common/DateInput';
 
-const HealthInsuranceForm = ({ onSuccess, editingPolicy }) => {
+const HealthInsuranceForm = ({ onSuccess, editingPolicy, formMode = 'create' }) => {
     const [formData, setFormData] = useState({
         policyStartDate: '',
         policyEndDate: '',
@@ -55,8 +55,13 @@ const HealthInsuranceForm = ({ onSuccess, editingPolicy }) => {
         setLoading(true);
 
         try {
-            await healthInsuranceAPI.create(formData);
-            successMessage('Health insurance policy created successfully');
+            if (formMode === 'edit' && editingPolicy?._id) {
+                await healthInsuranceAPI.update(editingPolicy._id, formData);
+                successMessage('Health insurance policy updated successfully');
+            } else {
+                await healthInsuranceAPI.create(formData);
+                successMessage('Health insurance policy created successfully');
+            }
             setFormData({
                 policyStartDate: '',
                 policyEndDate: '',
@@ -239,7 +244,13 @@ const HealthInsuranceForm = ({ onSuccess, editingPolicy }) => {
                     className="btn btn-primary w-full"
                     disabled={loading}
                 >
-                    {loading ? 'Saving...' : editingPolicy ? 'Create Renewed Policy' : 'Create Policy'}
+                    {loading
+                        ? 'Saving...'
+                        : formMode === 'edit'
+                            ? 'Update Policy'
+                            : formMode === 'renew'
+                                ? 'Create Renewed Policy'
+                                : 'Create Policy'}
                 </button>
             </form>
         </div>
