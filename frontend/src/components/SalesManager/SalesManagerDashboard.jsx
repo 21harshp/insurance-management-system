@@ -17,6 +17,7 @@ const SalesManagerDashboard = () => {
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [showFormModal, setShowFormModal] = useState(false);
     const [editingPolicy, setEditingPolicy] = useState(null);
+    const [formMode, setFormMode] = useState('create');
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     const handlePolicyCreated = () => {
@@ -27,12 +28,20 @@ const SalesManagerDashboard = () => {
 
     const handleRenew = (policy) => {
         setEditingPolicy(policy);
+        setFormMode('renew');
+        setShowFormModal(true);
+    };
+
+    const handleEdit = (policy) => {
+        setEditingPolicy(policy);
+        setFormMode('edit');
         setShowFormModal(true);
     };
 
     const handleCloseModal = () => {
         setShowFormModal(false);
         setEditingPolicy(null);
+        setFormMode('create');
     };
 
     const insuranceLabel = insuranceType === 'health' ? 'Health' : insuranceType === 'motor' ? 'Motor' : 'Life';
@@ -56,7 +65,7 @@ const SalesManagerDashboard = () => {
                         />
                         <button
                             className="btn btn-primary"
-                            onClick={() => { setEditingPolicy(null); setShowFormModal(true); }}
+                            onClick={() => { setEditingPolicy(null); setFormMode('create'); setShowFormModal(true); }}
                         >
                             + Create New Policy
                         </button>
@@ -75,16 +84,18 @@ const SalesManagerDashboard = () => {
                             <HealthInsuranceTable
                                 refreshTrigger={refreshTrigger}
                                 onRenew={handleRenew}
+                                onEdit={handleEdit}
                             />
                         ) : insuranceType === 'motor' ? (
                             <MotorInsuranceTable
                                 refreshTrigger={refreshTrigger}
                                 onRenew={handleRenew}
+                                onEdit={handleEdit}
                             />
                         ) : (
                             <LifeInsuranceTable
                                 refreshTrigger={refreshTrigger}
-                                onRenew={handleRenew}
+                                onEdit={handleEdit}
                             />
                         )}
                     </div>
@@ -97,7 +108,11 @@ const SalesManagerDashboard = () => {
                     <div className="modal modal-lg" onClick={(e) => e.stopPropagation()}>
                         <div className="modal-header">
                             <h3 className="modal-title">
-                                {editingPolicy ? `Renew ${insuranceLabel} Policy` : `Create New ${insuranceLabel} Policy`}
+                                {formMode === 'edit'
+                                    ? `Edit ${insuranceLabel} Policy`
+                                    : formMode === 'renew'
+                                        ? `Renew ${insuranceLabel} Policy`
+                                        : `Create New ${insuranceLabel} Policy`}
                             </h3>
                             <button className="modal-close" onClick={handleCloseModal}>×</button>
                         </div>
@@ -106,16 +121,19 @@ const SalesManagerDashboard = () => {
                             <HealthInsuranceForm
                                 onSuccess={handlePolicyCreated}
                                 editingPolicy={editingPolicy}
+                                formMode={formMode}
                             />
                         ) : insuranceType === 'motor' ? (
                             <MotorInsuranceForm
                                 onSuccess={handlePolicyCreated}
                                 editingPolicy={editingPolicy}
+                                formMode={formMode}
                             />
                         ) : (
                             <LifeInsuranceForm
                                 onSuccess={handlePolicyCreated}
                                 editingPolicy={editingPolicy}
+                                formMode={formMode}
                             />
                         )}
                     </div>

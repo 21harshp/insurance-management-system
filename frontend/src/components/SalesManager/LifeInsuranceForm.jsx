@@ -3,7 +3,7 @@ import { lifeInsuranceAPI } from '../../services/api';
 import { successMessage, errorMessage } from '../../utils/message';
 import DateInput from '../Common/DateInput';
 
-const LifeInsuranceForm = ({ onSuccess, editingPolicy }) => {
+const LifeInsuranceForm = ({ onSuccess, editingPolicy, formMode = 'create' }) => {
     const [formData, setFormData] = useState({
         policyHolderName: '',
         policyHolderAddress: '',
@@ -93,8 +93,13 @@ const LifeInsuranceForm = ({ onSuccess, editingPolicy }) => {
         setLoading(true);
 
         try {
-            await lifeInsuranceAPI.create(formData);
-            successMessage('Life insurance policy created successfully');
+            if (formMode === 'edit' && editingPolicy?._id) {
+                await lifeInsuranceAPI.update(editingPolicy._id, formData);
+                successMessage('Life insurance policy updated successfully');
+            } else {
+                await lifeInsuranceAPI.create(formData);
+                successMessage('Life insurance policy created successfully');
+            }
             setFormData({
                 policyHolderName: '',
                 policyHolderAddress: '',
@@ -383,7 +388,13 @@ const LifeInsuranceForm = ({ onSuccess, editingPolicy }) => {
                     className="btn btn-primary w-full"
                     disabled={loading}
                 >
-                    {loading ? 'Saving...' : editingPolicy ? 'Create Renewed Policy' : 'Create Policy'}
+                    {loading
+                        ? 'Saving...'
+                        : formMode === 'edit'
+                            ? 'Update Policy'
+                            : formMode === 'renew'
+                                ? 'Create Renewed Policy'
+                                : 'Create Policy'}
                 </button>
             </form>
         </div>
