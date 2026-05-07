@@ -4,6 +4,7 @@ A full-stack web application for managing Health and Motor insurance policies wi
 
 ## Features
 
+
 ### User Roles
 - **Admin**: Manage Sales Managers, view/reset passwords
 - **Sales Manager**: Create and manage insurance policies, change own password
