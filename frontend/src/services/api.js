@@ -34,6 +34,9 @@ export const userAPI = {
     getSalesManagers: () => api.get('/users/sales-managers'),
     createSalesManager: (data) => api.post('/users/sales-managers', data),
     resetPassword: (id, data) => api.put(`/users/sales-managers/${id}/reset-password`, data),
+    toggleStatus: (id) => api.patch(`/users/sales-managers/${id}/toggle-status`),
+    updateNotes: (id, notes) => api.patch(`/users/sales-managers/${id}/notes`, { notes }),
+    updateProfile: (id, data) => api.patch(`/users/sales-managers/${id}/profile`, data),
 };
 
 // Health Insurance APIs

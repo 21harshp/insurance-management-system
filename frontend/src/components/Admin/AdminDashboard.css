@@ -1,43 +1,135 @@
+/* ═══════════════════════════════════════════════════════════════
+   Admin Dashboard Layout
+   ═══════════════════════════════════════════════════════════════ */
+
 .admin-header {
-    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
 }
 
-.admin-header h1 {
-    margin-bottom: 0.5rem;
+.admin-header__left h1 {
+    margin-bottom: 0.25rem;
 }
 
-.admin-content {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 2rem;
+.admin-create-btn {
+    white-space: nowrap;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
 }
 
-.admin-section {
-    min-height: 400px;
+/* Count badge in card header */
+.admin-count-badge {
+    font-size: 0.78rem;
+    font-weight: 600;
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--accent, #6366f1);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    border-radius: 999px;
+    padding: 0.2rem 0.7rem;
 }
 
-@media (max-width: 1024px) {
-    .admin-content {
-        grid-template-columns: 1fr;
-    }
+/* ═══════════════════════════════════════════════════════════════
+   Modal
+   ═══════════════════════════════════════════════════════════════ */
+
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+    animation: backdropIn 0.18s ease;
 }
+
+@keyframes backdropIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.modal-box {
+    background: var(--bg-secondary, #1a1d2e);
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    border-radius: 16px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+    animation: modalSlideIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow: hidden;
+}
+
+@keyframes modalSlideIn {
+    from { opacity: 0; transform: translateY(-20px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+}
+
+.modal-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-primary, #e5e7eb);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-muted, #9ca3af);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.3rem 0.5rem;
+    border-radius: 6px;
+    line-height: 1;
+    transition: background 0.15s, color 0.15s;
+}
+
+.modal-close:hover {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
     .admin-header {
         margin-bottom: 1.25rem;
     }
-
-    .admin-content {
-        gap: 1.25rem;
-    }
-
-    .admin-section {
-        min-height: unset;
-    }
 }
 
 @media (max-width: 480px) {
-    .admin-header h1 {
+    .admin-header__left h1 {
         font-size: 1.5rem;
+    }
+
+    .modal-box {
+        border-radius: 12px;
+    }
+
+    .modal-header,
+    .modal-body {
+        padding: 1rem;
     }
 }

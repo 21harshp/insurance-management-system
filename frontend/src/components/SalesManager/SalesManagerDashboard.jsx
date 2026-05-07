@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Navbar from '../Common/Navbar';
+import { useAuth } from '../../context/AuthContext';
 import ChangePassword from '../Auth/ChangePassword';
 import InsuranceSelector from './InsuranceSelector';
 import HealthInsuranceForm from './HealthInsuranceForm';
@@ -11,6 +12,7 @@ import LifeInsuranceTable from './LifeInsuranceTable';
 import './SalesManagerDashboard.css';
 
 const SalesManagerDashboard = () => {
+    const { user } = useAuth();
     const [insuranceType, setInsuranceType] = useState('health');
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [showFormModal, setShowFormModal] = useState(false);
@@ -40,6 +42,11 @@ const SalesManagerDashboard = () => {
             <Navbar onChangePassword={() => setShowChangePassword(true)} />
 
             <div className="container">
+                {user?.planWarning && (
+                    <div className="sm-plan-warning-banner">
+                        Your plan ends in {user.planWarning.daysLeft} day{user.planWarning.daysLeft === 1 ? '' : 's'}. Contact your administrator.
+                    </div>
+                )}
                 <div className="dashboard-header">
                     <h1>Sales Manager Dashboard</h1>
                     <div className="dashboard-header-actions">

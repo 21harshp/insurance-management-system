@@ -4,6 +4,15 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { auth } = require('../middleware/auth');
 
+const getDaysLeftUntilEnd = (endDate) => {
+    if (!endDate) return null;
+    const now = new Date();
+    const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999);
+    const diffMs = end.getTime() - now.getTime();
+    return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+};
+
 // Login route
 router.post('/login', async (req, res) => {
     try {
@@ -60,11 +69,29 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
+        const daysLeft = getDaysLeftUntilEnd(user.packageEndDate);
+        if (daysLeft !== null && daysLeft <= 0 && user.isEnabled !== false) {
+            user.isEnabled = false;
+        }
+
+        // Check if the sales manager account is enabled
+        if (user.isEnabled === false) {
+            if (user.isModified('isEnabled')) {
+                await user.save();
+            }
+            return res.status(403).json({ message: 'Your account has been disabled. Please contact the administrator.' });
+        }
+
+        user.lastLoginAt = new Date();
+        await user.save();
+
         const token = jwt.sign(
             { userId: user._id, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
+
+        const shouldShowPlanWarning = daysLeft !== null && daysLeft > 0 && daysLeft <= 10;
 
         res.json({
             token,
@@ -72,6 +99,14 @@ router.post('/login', async (req, res) => {
                 id: user._id,
                 userId: user.userId,
                 role: user.role,
+                packageStartDate: user.packageStartDate,
+                packageEndDate: user.packageEndDate,
+                planWarning: shouldShowPlanWarning
+                    ? {
+                        daysLeft,
+                        message: `Your plan ends in ${daysLeft} day${daysLeft === 1 ? '' : 's'}. Contact your administrator.`,
+                    }
+                    : null,
             },
         });
     } catch (error) {

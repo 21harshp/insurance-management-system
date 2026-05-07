@@ -16,9 +16,37 @@ const userSchema = new mongoose.Schema({
         enum: ['admin', 'salesManager'],
         required: true,
     },
+    name: {
+        type: String,
+        default: '',
+    },
+    email: {
+        type: String,
+        default: '',
+    },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+    },
+    isEnabled: {
+        type: Boolean,
+        default: true,
+    },
+    lastLoginAt: {
+        type: Date,
+        default: null,
+    },
+    packageStartDate: {
+        type: Date,
+        default: null,
+    },
+    packageEndDate: {
+        type: Date,
+        default: null,
+    },
+    notes: {
+        type: String,
+        default: '',
     },
 }, {
     timestamps: true,
