@@ -55,7 +55,7 @@ const motorInsuranceSchema = new mongoose.Schema({
     },
     policyCopyLink: {
         type: String,
-        required: true,
+        required: false,
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,

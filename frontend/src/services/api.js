@@ -63,4 +63,15 @@ export const lifeInsuranceAPI = {
     delete: (id) => api.delete(`/life-insurance/${id}`),
 };
 
+// File Upload API (Google Drive)
+export const uploadAPI = {
+    uploadPolicyCopy: (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        return api.post('/upload/policy-copy', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        });
+    },
+};
+
 export default api;

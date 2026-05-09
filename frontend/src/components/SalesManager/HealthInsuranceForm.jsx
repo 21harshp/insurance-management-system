@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { healthInsuranceAPI } from '../../services/api';
-import { successMessage } from '../../utils/message';
+import { healthInsuranceAPI, uploadAPI } from '../../services/api';
+import { successMessage, errorMessage } from '../../utils/message';
 import DateInput from '../Common/DateInput';
 
 const HealthInsuranceForm = ({ onSuccess, editingPolicy, formMode = 'create' }) => {
@@ -21,6 +21,8 @@ const HealthInsuranceForm = ({ onSuccess, editingPolicy, formMode = 'create' }) 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [uploading, setUploading] = useState(false);
+    const [uploadedFileName, setUploadedFileName] = useState('');
 
     useEffect(() => {
         if (editingPolicy) {
@@ -38,6 +40,9 @@ const HealthInsuranceForm = ({ onSuccess, editingPolicy, formMode = 'create' }) 
                 policyCopyLink: editingPolicy.policyCopyLink || '',
                 agentName: editingPolicy.agentName || '',
             });
+            if (editingPolicy.policyCopyLink) {
+                setUploadedFileName('Previously uploaded file');
+            }
         }
     }, [editingPolicy]);
 
@@ -46,6 +51,25 @@ const HealthInsuranceForm = ({ onSuccess, editingPolicy, formMode = 'create' }) 
             ...formData,
             [e.target.name]: e.target.value,
         });
+    };
+
+    const handleFileUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setUploading(true);
+        setUploadedFileName('');
+        try {
+            const response = await uploadAPI.uploadPolicyCopy(file);
+            setFormData((prev) => ({ ...prev, policyCopyLink: response.data.url }));
+            setUploadedFileName(file.name);
+            successMessage('Policy copy uploaded to Google Drive successfully!');
+        } catch (err) {
+            errorMessage(err.response?.data?.message || 'File upload failed. Please try again.');
+        } finally {
+            setUploading(false);
+            e.target.value = '';
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -76,6 +100,7 @@ const HealthInsuranceForm = ({ onSuccess, editingPolicy, formMode = 'create' }) 
                 policyCopyLink: '',
                 agentName: '',
             });
+            setUploadedFileName('');
             setTimeout(() => {
                 setSuccess('');
                 onSuccess();
@@ -215,16 +240,67 @@ const HealthInsuranceForm = ({ onSuccess, editingPolicy, formMode = 'create' }) 
                 </div>
 
                 <div className="form-group">
-                    <label className="form-label required">Policy Copy Link</label>
-                    <input
-                        type="url"
-                        name="policyCopyLink"
-                        className="form-input"
-                        value={formData.policyCopyLink}
-                        onChange={handleChange}
-                        placeholder="Enter policy copy link"
-                        required
-                    />
+                    <label className="form-label">Policy Copy</label>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <label
+                            htmlFor="health-policy-copy-upload"
+                            style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                padding: '10px 16px',
+                                background: uploading ? '#6c757d' : 'linear-gradient(135deg, #4f46e5, #7c3aed)',
+                                color: '#fff',
+                                borderRadius: '8px',
+                                cursor: uploading ? 'not-allowed' : 'pointer',
+                                fontWeight: '600',
+                                fontSize: '14px',
+                                width: 'fit-content',
+                                transition: 'opacity 0.2s',
+                            }}
+                        >
+                            {uploading ? (
+                                <>
+                                    <span style={{ display: 'inline-block', width: '14px', height: '14px', border: '2px solid #fff', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                                    Uploading to Drive...
+                                </>
+                            ) : (
+                                <>
+                                    📎 Upload Policy Copy
+                                </>
+                            )}
+                        </label>
+                        <input
+                            id="health-policy-copy-upload"
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx"
+                            onChange={handleFileUpload}
+                            disabled={uploading}
+                            style={{ display: 'none' }}
+                        />
+                        {uploadedFileName && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: '#16a34a', fontWeight: '500' }}>
+                                <span>✅</span>
+                                <span>{uploadedFileName}</span>
+                            </div>
+                        )}
+                        {formData.policyCopyLink && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px' }}>
+                                <a href={formData.policyCopyLink} target="_blank" rel="noopener noreferrer" style={{ color: '#4f46e5', textDecoration: 'underline' }}>
+                                    🔗 View uploaded file on Google Drive
+                                </a>
+                            </div>
+                        )}
+                        <input
+                            type="url"
+                            name="policyCopyLink"
+                            className="form-input"
+                            value={formData.policyCopyLink}
+                            onChange={handleChange}
+                            placeholder="Or paste a Google Drive / URL link manually"
+                            style={{ fontSize: '13px' }}
+                        />
+                    </div>
                 </div>
 
                 <div className="form-group">

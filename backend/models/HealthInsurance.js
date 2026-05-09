@@ -43,7 +43,7 @@ const healthInsuranceSchema = new mongoose.Schema({
     },
     policyCopyLink: {
         type: String,
-        required: true,
+        required: false,
     },
     agentName: {
         type: String,

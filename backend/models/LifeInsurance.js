@@ -85,6 +85,10 @@ const lifeInsuranceSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    policyCopyLink: {
+        type: String,
+        required: false,
+    },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
